@@ -6,33 +6,50 @@
 #define SEATAC_ENGINE_CHESSGAME_H
 
 #include "GameState.h"
+#include "SeaEngine.h"
+#include "ChessPlayer.h"
 
 class ChessGame {
-    //default constructor to start a game from scratch. Will also have to support starting game from separate position.
 public:
-    char *board;
-    int moveNumber; //odd is white move, even is black move
-    int winner;
-    GameState *gameState;
-
-
-public:
-
-    ChessGame()
+    ChessGame(const ChessPlayer *white, const ChessPlayer *black)
+    :m_Board("rnbqkbnrpppppppp................................PPPPPPPPRNBQKBNR")
+    ,m_MoveNumber(1)
+    ,m_Winner(-1)
+    ,m_MaxGameMoves(50)
+    ,m_PlayerWhite(white)
+    ,m_PlayerBlack(black)
+    ,m_GameState(m_Board)
     {
-        board = "rnbqkbnrpppppppp00000000000000000000000000000000PPPPPPPPRNBQKBNR";
-        moveNumber = 1;
-        GameState newState(board);
-        gameState = &newState;
     }
 
-    //method for player/engine to interact with the game, and move the piece. returns the moveNumber.
-    int MovePiece(int source, int dest);
-
-    int waitForUserInput();
+    Color StartGame();
 
     void DisplayBoard();
 
+    void UpdateBoard();
+    //method for player/engine to interact with the game, and move the piece. returns the moveNumber.
+
+    void UpdateGameWithMove(std::bitset<64> move);
+
+    static char* GameStateToCharBoard(GameState GS);
+
+    bool GameOver()
+    {
+        if(m_Winner == -1 && m_MoveNumber < m_MaxGameMoves)
+        {
+            return false;
+        }
+        return true;
+    }
+
+public:
+    char *m_Board;
+    int m_MoveNumber;
+    int m_MaxGameMoves;
+    int m_Winner;
+    GameState m_GameState;
+    const ChessPlayer* m_PlayerWhite;
+    const ChessPlayer* m_PlayerBlack;
 };
 
 

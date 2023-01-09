@@ -1,23 +1,26 @@
 #include <iostream>
+#include <stdio.h>
 #include "ChessGame.h"
-#include "SeaTac_Engine.h"
-#include "SeaEngine.h"
+#include "SeaChessUtils.h"
+#include "ChessPlayer.h"
 
+//This is the executed to run the chess game.
 int main() {
+/*
+    GameState test("..........................q..B................................");
+    std::bitset<64> queen = test.blackPieces[ChessPieces::Queen];
+    SeaChessUtils::PrintBitBoard(queen);
+    std::bitset<64> queenMoves;
+    queenMoves = test.CalculateLegalMoves_Queen(queen, Color::Black);
+    SeaChessUtils::PrintBitBoard(queenMoves);
+*/
 
-    ChessGame game01; //why don't I need to explicitly initialize?
-    game01.winner = -1;
-    while(game01.winner == -1 && game01.moveNumber < 40) {
-        game01.DisplayBoard();
-        SeaEngine::CalcBestMove(*game01.gameState, 0, true);
+    const SeaEngine *white = new SeaEngine(Color::White, 4);
+    const SeaEngine *black = new SeaEngine(Color::Black, 4);
 
-        //generate best move.
+    ChessGame chess_game(white, black);
 
-        int sourceMove= 0;
-        int destMove = 0;
-        game01.moveNumber++;
-        game01.winner = 1;
-    }
+    chess_game.StartGame();
 
     return 0;
 }

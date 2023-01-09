@@ -6,12 +6,27 @@
 #define SEATAC_ENGINE_SEAENGINE_H
 
 #include "GameState.h"
+#include "ChessPlayer.h"
+#include <chrono>
 
-class SeaEngine {
+class SeaEngine : public ChessPlayer{
 public:
-    static float CalcBestMove(GameState gameState, int depth, bool color);
-    static GameState MakeMove(GameState gameState, std::bitset<64> moveBoard, GameState::ChessPieces piece, bool color);
-    static int CalculateScore(GameState gameState);
+    SeaEngine(Color color, int depth)
+    :ChessPlayer(color)
+    ,m_depth(depth)
+    {}
+
+    ~SeaEngine() override = default;
+
+    std::bitset<64> MakeMove( const GameState *gameState) const override;
+
+    static std::bitset<64> CalculateBestMove(const GameState* gameState, int depth, Color color);
+    static float CalculateBestMove_internal(const GameState* gameState, int depth, Color color);
+
+    static int CalculateScore(const GameState* gameState);
+
+public:
+    int m_depth;
 };
 
 
